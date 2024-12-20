@@ -50,7 +50,7 @@ public class UserController {
             throw new ValidationException("Email должен быть корректным и содержать символ '@'.");
         }
 
-        if (user.getLogin() == null || user.getLogin().trim().isEmpty() || user.getLogin().contains(" ")) {
+        if (user.getLogin() == null || user.getLogin().trim().isEmpty() && user.getLogin().contains(" ")) {
             throw new ValidationException("Логин не может быть пустым или содержать пробелы.");
         }
 
