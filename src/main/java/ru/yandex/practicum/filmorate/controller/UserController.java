@@ -45,17 +45,22 @@ public class UserController {
     }
 
     private void validateUser(User user) {
-        if (user.getEmail() == null || !user.getEmail().contains("@")) {
+
+        String emailRegex = "^[\\w.%+-]+@[\\w.-]+\\.[a-zA-Z]{2,}$";
+        if (user.getEmail() == null || !user.getEmail().matches(emailRegex)) {
             throw new ValidationException("Email должен быть корректным и содержать символ '@'.");
         }
+
         if (user.getLogin() == null || user.getLogin().trim().isEmpty() || user.getLogin().contains(" ")) {
             throw new ValidationException("Логин не может быть пустым или содержать пробелы.");
         }
-        if (user.getName() == null || user.getName().isEmpty()) {
-            user.setName(user.getLogin());
-        }
-        if (user.getBirthday().isAfter(LocalDate.now())) {
+
+        if (user.getBirthday() != null && user.getBirthday().isAfter(LocalDate.now())) {
             throw new ValidationException("Дата рождения не может быть в будущем.");
+        }
+        
+        if (user.getName() == null || user.getName().trim().isEmpty()) {
+            user.setName(user.getLogin());
         }
     }
 }
