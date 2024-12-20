@@ -45,7 +45,6 @@ public class UserController {
     }
 
     private void validateUser(User user) {
-
         String emailRegex = "^[\\w.%+-]+@[\\w.-]+\\.[a-zA-Z]{2,}$";
         if (user.getEmail() == null || !user.getEmail().matches(emailRegex)) {
             throw new ValidationException("Email должен быть корректным и содержать символ '@'.");
@@ -58,7 +57,7 @@ public class UserController {
         if (user.getBirthday() != null && user.getBirthday().isAfter(LocalDate.now())) {
             throw new ValidationException("Дата рождения не может быть в будущем.");
         }
-        
+
         if (user.getName() == null || user.getName().trim().isEmpty()) {
             user.setName(user.getLogin());
         }
