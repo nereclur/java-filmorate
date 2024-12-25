@@ -53,7 +53,7 @@ public class FilmController {
 
     private void validateFilm(Film film) {
         String name = film.getName();
-        if (name == null || name.isEmpty() || name.isBlank()) {
+        if (name == null || name.isBlank()) {
             log.error("Ошибка при добавлении фильма: введено пустое название");
             throw new ValidationException("Название не может быть пустым.");
         }

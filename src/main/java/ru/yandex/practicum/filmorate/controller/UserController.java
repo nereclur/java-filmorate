@@ -56,12 +56,12 @@ public class UserController {
             throw new ValidationException("Некорректная электронная почта.");
         }
         String login = user.getLogin();
-        if (login == null || login.isEmpty() || login.isBlank() || login.contains(" ")) {
+        if (login == null || login.isBlank() || login.contains(" ")) {
             log.error("Ошибка при добавлении пользователя: некорректный логин - {}", login);
             throw new ValidationException("Некорректный логин.");
         }
         String name = user.getName();
-        if (name == null || name.isEmpty() || name.isBlank()) {
+        if (name == null || name.isBlank()) {
             log.info("Пользователь использует логин - {} вместо имени", user.getLogin());
             user.setName(user.getLogin());
         }
