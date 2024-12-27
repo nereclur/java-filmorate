@@ -39,38 +39,38 @@ public class FilmController {
 
     @PutMapping
     public Film updateFilm(@RequestBody Film film) {
-        log.info("пришел Put запрос /films с фильмом: {}", film);
+        log.info("пришел Put запрос /films с фильмом: {}.", film);
         validateFilm(film);
         Film oldFilm = films.get(film.getId());
         if (oldFilm == null) {
-            log.error("Фильм с id {} не найден", film.getId());
-            throw new ValidationException("Фильм не найден");
+            log.error("Фильм с id {} не найден.", film.getId());
+            throw new ValidationException("Фильм не найден.");
         }
         films.put(film.getId(), film);
-        log.info("Отправлен ответ Put /films с фильмом: {}", film);
+        log.info("Отправлен ответ Put /films с фильмом: {}.", film);
         return film;
     }
 
     private void validateFilm(Film film) {
         String name = film.getName();
         if (name == null || name.isBlank()) {
-            log.error("Ошибка при добавлении фильма: введено пустое название");
+            log.error("Ошибка при добавлении фильма: введено пустое название.");
             throw new ValidationException("Название не может быть пустым.");
         }
         if (film.getDescription().length() > 200) {
-            log.error("Ошибка при добавлении фильма: превышена максимальная длина описания");
+            log.error("Ошибка при добавлении фильма: превышена максимальная длина описания.");
             throw new ValidationException("Максимальная длина строки - 200 символов.");
         }
         if (film.getDuration() < 1) {
-            log.error("Ошибка при добавлении фильма: введена некорректная продолжительность - {}", film.getDuration());
+            log.error("Ошибка при добавлении фильма: введена некорректная продолжительность - {}.", film.getDuration());
             throw new ValidationException("Продолжительность не может быть отрицательной.");
         }
         LocalDate releaseDate = film.getReleaseDate();
         if (releaseDate == null) {
-            log.error("Ошибка при добавлении фильма: введена пустая дата релиза");
-            throw new ValidationException("Дата релиза не может быть пустой");
+            log.error("Ошибка при добавлении фильма: введена пустая дата релиза.");
+            throw new ValidationException("Дата релиза не может быть пустой.");
         } else if (releaseDate.isBefore(MOVIE_BIRTHDAY)) {
-            log.error("Ошибка при добавлении фильма: введена дата релиза раньше 28 декабря 1985 года - {}", releaseDate);
+            log.error("Ошибка при добавлении фильма: введена дата релиза раньше 28 декабря 1985 года - {}.", releaseDate);
             throw new ValidationException("Релиз не может быть раньше 28 декабря 1985 года.");
         }
     }
