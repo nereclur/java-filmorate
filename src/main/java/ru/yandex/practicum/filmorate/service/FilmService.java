@@ -46,7 +46,7 @@ public class FilmService {
 
     public Film getFilmById(Integer id) {
         return inMemoryFilmStorage.getFilmById(id)
-                .orElseThrow(() -> new NotFoundException("Фильм с id " + id + " отсутствует."));
+                .orElseThrow(() -> new NotFoundException("Филь с id " + id + " отсутствует."));
     }
 
     public void addLike(Integer userId, Integer filmId) {
