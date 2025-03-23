@@ -38,4 +38,10 @@ public class LikeRepository extends BaseRepository<Film> implements LikeStorage 
     public List<Film> findBestFilms(int count) {
         return findMany(FIND_BEST_QUERY, count);
     }
+
+    @Override
+    public boolean delete(Integer id) {
+        String sql = "DELETE FROM likes WHERE film_id = ?";
+        return delete(sql, id);
+    }
 }

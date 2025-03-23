@@ -51,4 +51,10 @@ public class FriendshipRepository extends BaseRepository<User> implements Friend
     public Optional<User> getFriendById(int userId, int friendId) {
         return findOne(FIND_FRIEND_BY_ID_QUERY, userId, friendId);
     }
+
+    @Override
+    public boolean delete(Integer id) {
+        String sql = "DELETE FROM friends WHERE user_id = ? OR friend_id = ?";
+        return delete(sql, id, id);
+    }
 }

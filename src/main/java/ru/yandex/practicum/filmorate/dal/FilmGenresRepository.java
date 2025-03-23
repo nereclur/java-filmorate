@@ -32,4 +32,10 @@ public class FilmGenresRepository extends BaseRepository<Integer> implements Fil
     public List<Integer> getFilmGenres(int filmId) {
         return findMany(FIND_BY_ID_QUERY, filmId);
     }
+
+    @Override
+    public boolean delete(Integer id) {
+        String sql = "DELETE FROM filmsgenres WHERE film_id = ?";
+        return delete(sql, id);
+    }
 }
