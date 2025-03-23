@@ -139,6 +139,7 @@ public class FilmService {
             throw new ValidationException(massage);
         }
     }
+    
     private void validateGenresExist(Collection<Genre> genres) {
         if (genres == null || genres.isEmpty()) {
             return;
