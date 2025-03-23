@@ -53,10 +53,7 @@ public class FilmService {
     }
 
     public List<FilmDto> findAll() {
-        return fs.findAll()
-                .stream()
-                .map(FilmMapper::mapToFilmDto)
-                .toList();
+        return fs.findAll().stream().map(FilmMapper::mapToFilmDto).toList();
     }
 
     public FilmDto create(NewFilmRequest request) {
@@ -73,18 +70,14 @@ public class FilmService {
     }
 
     public FilmDto update(Integer id, UpdateFilmRequest request) {
-        Film film = fs.getFilmById(id)
-                .map(film1 -> FilmMapper.updateFilmFields(film1, request))
-                .orElseThrow(() -> new NotFoundException("Фильм не найден"));
+        Film film = fs.getFilmById(id).map(film1 -> FilmMapper.updateFilmFields(film1, request)).orElseThrow(() -> new NotFoundException("Фильм не найден"));
         validateFilm(film);
         film = fs.update(film);
         return FilmMapper.mapToFilmDto(film);
     }
 
     public FilmDto getFilmById(Integer id) {
-        return fs.getFilmById(id)
-                .map(FilmMapper::mapToFilmDto)
-                .orElseThrow(() -> new NotFoundException("Не найден фильм с id" + id));
+        return fs.getFilmById(id).map(FilmMapper::mapToFilmDto).orElseThrow(() -> new NotFoundException("Не найден фильм с id" + id));
     }
 
     public void addLike(Integer userId, Integer filmId) {
@@ -93,8 +86,7 @@ public class FilmService {
             log.error("Ошибка при добавлении лайка: пользователь с id {}  не найден", userId);
             throw new NotFoundException("Пользователь с id " + userId + " не найден");
         }
-        Film film = fs.getFilmById(filmId)
-                .orElseThrow(() -> new NotFoundException("Фильм с id " + filmId + " не найден"));
+        Film film = fs.getFilmById(filmId).orElseThrow(() -> new NotFoundException("Фильм с id " + filmId + " не найден"));
         ls.addLike(filmId, userId);
         log.trace("Фильму с id {} поставлен лайк пользователем с id {}", filmId, userId);
     }
@@ -117,20 +109,16 @@ public class FilmService {
 
     public List<FilmDto> getBestFilms(Integer count) {
         List<Film> allFilms = ls.findBestFilms(count);
-        return allFilms.stream()
-                .map(FilmMapper::mapToFilmDto)
-                .toList();
+        return allFilms.stream().map(FilmMapper::mapToFilmDto).toList();
     }
 
     private void validateFilm(Film film) {
         String name = film.getName();
-        validate(() -> name.isEmpty() ||
-                StringUtils.isBlank(name), "Название не может быть пустым.");
+        validate(() -> name.isEmpty() || StringUtils.isBlank(name), "Название не может быть пустым.");
         validate(() -> film.getDescription().length() > 200, "Максимальная длина строки - 200 символов.");
         validate(() -> film.getDuration() < 1, "Продолжительность не может быть отрицательной.");
         LocalDate releaseDate = film.getReleaseDate();
-        validate(() -> releaseDate.isBefore(MOVIE_BIRTHDAY),
-                "Релиз не может быть раньше 28 декабря 1985 года.");
+        validate(() -> releaseDate.isBefore(MOVIE_BIRTHDAY), "Релиз не может быть раньше 28 декабря 1985 года.");
     }
 
     private void validate(Supplier<Boolean> supplier, String massage) {
@@ -139,20 +127,15 @@ public class FilmService {
             throw new ValidationException(massage);
         }
     }
-    
+
     private void validateGenresExist(Collection<Genre> genres) {
         if (genres == null || genres.isEmpty()) {
             return;
         }
 
-        Set<Integer> genreIds = genres.stream()
-                .map(Genre::getId)
-                .collect(Collectors.toSet());
+        Set<Integer> genreIds = genres.stream().map(Genre::getId).collect(Collectors.toSet());
 
-        String sqlQuery = String.format("SELECT genre_id FROM Genres WHERE genre_id IN (%s)",
-                genreIds.stream()
-                        .map(String::valueOf)
-                        .collect(Collectors.joining(", ")));
+        String sqlQuery = String.format("SELECT genre_id FROM Genres WHERE genre_id IN (%s)", genreIds.stream().map(String::valueOf).collect(Collectors.joining(", ")));
 
         List<Integer> existingIds = jdbc.query(sqlQuery, (rs, rowNum) -> rs.getInt("genre_id"));
 
