@@ -42,6 +42,11 @@ public class InMemoryFilmStorage implements FilmStorage {
     }
 
     @Override
+    public boolean delete(Integer id) {
+        return false;
+    }
+
+    @Override
     public Optional<Film> getFilmById(Integer id) {
         if (films.containsKey(id)) {
             return Optional.of(films.get(id));
