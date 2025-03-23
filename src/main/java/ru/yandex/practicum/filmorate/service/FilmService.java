@@ -133,15 +133,20 @@ public class FilmService {
             return;
         }
 
-        Set<Integer> genreIds = genres.stream().map(Genre::getId).collect(Collectors.toSet());
+        Set<Integer> genreIds = genres.stream()
+                .map(Genre::getId)
+                .collect(Collectors.toSet());
 
-        String sqlQuery = String.format("SELECT genre_id FROM Genres WHERE genre_id IN (%s)", genreIds.stream().map(String::valueOf).collect(Collectors.joining(", ")));
+        String sqlQuery = String.format("SELECT genre_id FROM Genres WHERE genre_id IN (%s)",
+                genreIds.stream()
+                        .map(String::valueOf)
+                        .collect(Collectors.joining(", ")));
 
         List<Integer> existingIds = jdbc.query(sqlQuery, (rs, rowNum) -> rs.getInt("genre_id"));
 
         if (existingIds.size() != genreIds.size()) {
             genreIds.removeAll(existingIds);
-            throw new ValidationException("Некоторые жанры не существуют: " + genreIds);
+            throw new NotFoundException("Некоторые жанры не существуют: " + genreIds);
         }
     }
 }
