@@ -146,7 +146,7 @@ public class UserService {
         }
         LocalDate birthday = user.getBirthday();
         if (birthday.isAfter(LocalDate.now())) {
-            log.error("Ошибка при добавлении пользователя: некоррктная дата рождения - {}", birthday);
+            log.error("Ошибка при добавлении пользователя: некорректная дата рождения - {}", birthday);
             throw new ValidationException("Некорректная дата рождения.");
         }
     }
