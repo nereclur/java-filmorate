@@ -49,7 +49,7 @@ public class FilmService {
         this.ls = likeRepository;
         this.us = userRepository;
         this.mpaRepository = mpaRepository;
-        this.jdbc = jdbc; // Инициализация
+        this.jdbc = jdbc;
     }
 
     public List<FilmDto> findAll() {
@@ -59,19 +59,39 @@ public class FilmService {
     public FilmDto create(NewFilmRequest request) {
         Film film = FilmMapper.mapToFilm(request);
         validateFilm(film);
+
         if (film.getMpa() != null) {
             Optional<Mpa> mpaOptional = mpaRepository.getRatingById(film.getMpa().getId());
             if (mpaOptional.isEmpty()) {
                 throw new NotFoundException("Рейтинг MPA с id " + film.getMpa().getId() + " не найден");
             }
         }
+
+        if (film.getGenres() != null && !film.getGenres().isEmpty()) {
+            validateGenresExist(film.getGenres());
+        }
+
         film = fs.create(film);
         return FilmMapper.mapToFilmDto(film);
     }
 
     public FilmDto update(Integer id, UpdateFilmRequest request) {
-        Film film = fs.getFilmById(id).map(film1 -> FilmMapper.updateFilmFields(film1, request)).orElseThrow(() -> new NotFoundException("Фильм не найден"));
+        Film film = fs.getFilmById(id)
+                .map(film1 -> FilmMapper.updateFilmFields(film1, request))
+                .orElseThrow(() -> new NotFoundException("Фильм не найден"));
         validateFilm(film);
+
+        if (film.getMpa() != null) {
+            Optional<Mpa> mpaOptional = mpaRepository.getRatingById(film.getMpa().getId());
+            if (mpaOptional.isEmpty()) {
+                throw new NotFoundException("Рейтинг MPA с id " + film.getMpa().getId() + " не найден");
+            }
+        }
+
+        if (film.getGenres() != null && !film.getGenres().isEmpty()) {
+            validateGenresExist(film.getGenres());
+        }
+
         film = fs.update(film);
         return FilmMapper.mapToFilmDto(film);
     }
