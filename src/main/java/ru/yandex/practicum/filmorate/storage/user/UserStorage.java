@@ -12,7 +12,10 @@ public interface UserStorage {
 
     User update(User newUser);
 
+    boolean delete(Integer id);
+
     Optional<User> getUserById(Integer id);
 
     Optional<List<User>> getFriends(Integer id);
 }
+
