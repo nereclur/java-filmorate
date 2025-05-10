@@ -1,5 +1,6 @@
 package ru.yandex.practicum.filmorate.dal;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -11,6 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
+@Qualifier("userDbStorage")
 public class UserRepository extends BaseRepository<User> implements UserStorage {
     private static final String FIND_ALL_QUERY = "SELECT * FROM users";
     private static final String FIND_BY_ID_QUERY = " SELECT * FROM users WHERE user_id = ?";
@@ -65,6 +67,13 @@ public class UserRepository extends BaseRepository<User> implements UserStorage 
 
     @Override
     public Optional<List<User>> getFriends(Integer id) {
-        return Optional.empty();
+        String sql =
+                "SELECT u.* FROM users u " +
+                        "JOIN friends f ON u.user_id = f.friend_id " +
+                        "WHERE f.user_id = ?";
+
+        List<User> friends = findMany(sql, id);
+        return Optional.of(friends);
     }
+
 }
