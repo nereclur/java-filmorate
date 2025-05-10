@@ -1,4 +1,4 @@
-package ru.yandex.practicum.filmorate.storage;
+package ru.yandex.practicum.filmorate.storage.user;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,6 +39,11 @@ public class InMemoryUserStorage implements UserStorage {
     }
 
     @Override
+    public boolean delete(Integer id) {
+        return false;
+    }
+
+    @Override
     public Optional<User> getUserById(Integer id) {
         if (users.containsKey(id)) {
             return Optional.of(users.get(id));
@@ -47,7 +52,6 @@ public class InMemoryUserStorage implements UserStorage {
         return Optional.empty();
     }
 
-    @Override
     public Optional<List<User>> getFriends(Integer id) {
         List<User> result = new ArrayList<>();
         if (users.isEmpty()) {

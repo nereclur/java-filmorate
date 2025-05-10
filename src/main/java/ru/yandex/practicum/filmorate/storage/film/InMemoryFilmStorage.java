@@ -1,4 +1,4 @@
-package ru.yandex.practicum.filmorate.storage;
+package ru.yandex.practicum.filmorate.storage.film;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,6 +39,11 @@ public class InMemoryFilmStorage implements FilmStorage {
         }
         films.put(newFilm.getId(), newFilm);
         return newFilm;
+    }
+
+    @Override
+    public boolean delete(Integer id) {
+        return false;
     }
 
     @Override
